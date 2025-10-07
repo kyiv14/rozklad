@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>РОЗКЛАД 6 КЛАС (Оновлене)</title>
+    <title>РОЗКЛАД 6 КЛАС (Без localStorage)</title>
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -180,6 +180,9 @@
             text-align: right;
             border-top: 1px solid #eee;
             padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .modal-btn {
@@ -190,6 +193,18 @@
             cursor: pointer;
             margin-left: 10px;
             transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+        
+        #addLessonBtn {
+            background-color: #17a2b8;
+            color: white;
+            display: none;
+            margin-left: 0;
+        }
+        
+        #addLessonBtn:hover {
+            background-color: #138496;
         }
 
         #editBtn {
@@ -209,6 +224,11 @@
 
         #saveBtn:hover {
             background-color: #1e7e34;
+        }
+        
+        /* Группа кнопок Редактировать/Сохранить */
+        .edit-group {
+            display: flex;
         }
 
         /* Кнопка закриття */
@@ -270,17 +290,20 @@
                 </ul>
 
             <div class="modal-footer">
-                <button id="editBtn" class="modal-btn">Редагувати ✏️</button>
-                <button id="saveBtn" class="modal-btn">Зберегти ✔️</button>
+                <button id="addLessonBtn" class="modal-btn">➕ Додати урок</button>
+                <div class="edit-group">
+                    <button id="editBtn" class="modal-btn">Редагувати ✏️</button>
+                    <button id="saveBtn" class="modal-btn">Зберегти ✔️</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ДАНІ РОЗКЛАДУ (ОНОВЛЕНО) ---
+        // --- ДАНІ РОЗКЛАДУ (ТЕПЕР ВОНИ НЕ ЗБЕРІГАЮТЬСЯ ПОСТІЙНО) ---
         function getDefaultSchedule() {
             return {
-                "Понеділок": [ // 6 уроків (з 10:00 по 15:00)
+                "Понеділок": [ // 6 уроків
                     { time: "10:00", lesson: "Українська мова" },
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Історія" },
@@ -288,14 +311,14 @@
                     { time: "14:00", lesson: "Англійська мова" },
                     { time: "15:00", lesson: "Технології" }
                 ],
-                "Вівторок": [ // 5 уроків (з 10:00 по 14:00)
+                "Вівторок": [ // 5 уроків
                     { time: "10:00", lesson: "Географія" },
                     { time: "11:00", lesson: "Біологія" },
                     { time: "12:00", lesson: "Інформатика" },
                     { time: "13:00", lesson: "Образотворче мистецтво" },
                     { time: "14:00", lesson: "Основи здоров'я" }
                 ],
-                "Середа": [ // 6 уроків (з 10:00 по 15:00)
+                "Середа": [ // 6 уроків
                     { time: "10:00", lesson: "Фізика" },
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Українська література" },
@@ -303,14 +326,14 @@
                     { time: "14:00", lesson: "Хімія" },
                     { time: "15:00", lesson: "Етика" }
                 ],
-                "Четверг": [ // 5 уроків (з 10:00 по 14:00)
+                "Четверг": [ // 5 уроків
                     { time: "10:00", lesson: "Англійська мова" },
                     { time: "11:00", lesson: "Іноземна література" },
                     { time: "12:00", lesson: "Математика" },
                     { time: "13:00", lesson: "Музичне мистецтво" },
                     { time: "14:00", lesson: "Громадянська освіта" }
                 ],
-                "П'ятниця": [ // 4 уроки (з 11:00 по 14:00)
+                "П'ятниця": [ // 4 уроки
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Українська мова" },
                     { time: "13:00", lesson: "Зарубіжна література" },
@@ -318,24 +341,10 @@
                 ]
             };
         }
-
-        // --- ЛОГІКА ЗБЕРЕЖЕННЯ (localStorage) ---
-
-        // Завантажуємо розклад, пріоритет - збережені дані
-        function loadSchedule() {
-            const savedData = localStorage.getItem('class6Schedule');
-            if (savedData) {
-                try {
-                    return JSON.parse(savedData);
-                } catch (e) {
-                    console.error("Помилка при завантаженні розкладу з localStorage:", e);
-                    return getDefaultSchedule();
-                }
-            }
-            return getDefaultSchedule();
-        }
-
-        let scheduleData = loadSchedule();
+        
+        // !!! ЛОГІКА LOCALSTORAGE ВИДАЛЕНА !!!
+        // Присвоюємо дані за замовчуванням без спроби завантаження
+        let scheduleData = getDefaultSchedule();
 
         // --- ЛОГІКА МОДАЛЬНОГО ВІКНА ТА РЕДАГУВАННЯ ---
         const modal = document.getElementById('scheduleModal');
@@ -345,9 +354,21 @@
         const dayPlanks = document.querySelectorAll('.day-plank');
         const editBtn = document.getElementById('editBtn');
         const saveBtn = document.getElementById('saveBtn');
+        const addLessonBtn = document.getElementById('addLessonBtn');
 
         let currentDay = '';
         let isEditing = false;
+        
+        // Допоміжна функція для створення рядка редагування
+        function createEditableLessonRow(time = "", lesson = "") {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <input type="text" class="time-input" value="${time}" placeholder="Напр. 16:00" data-field="time">
+                <input type="text" class="name-input" value="${lesson}" placeholder="Назва предмета" data-field="lesson">
+            `;
+            listItem.style.cursor = 'default';
+            modalList.appendChild(listItem);
+        }
 
         // Рендеринг розкладу у модальному вікні
         function renderSchedule(day) {
@@ -379,24 +400,29 @@
             if (isEditing) {
                 editBtn.style.display = 'none';
                 saveBtn.style.display = 'inline-block';
-                listItems.forEach(li => {
-                    const timeSpan = li.querySelector('.lesson-time');
-                    const nameSpan = li.querySelector('.lesson-name');
-
-                    if (timeSpan && nameSpan) {
-                        timeSpan.outerHTML = `<input type="text" class="time-input" value="${timeSpan.textContent}" data-field="time">`;
-                        nameSpan.outerHTML = `<input type="text" class="name-input" value="${nameSpan.textContent}" data-field="lesson">`;
-                        li.style.cursor = 'default'; 
-                    }
+                addLessonBtn.style.display = 'inline-block';
+                
+                const schedule = scheduleData[currentDay] || [];
+                modalList.innerHTML = '';
+                
+                schedule.forEach(item => {
+                    createEditableLessonRow(item.time, item.lesson);
                 });
+                
             } else {
                 editBtn.style.display = 'inline-block';
                 saveBtn.style.display = 'none';
+                addLessonBtn.style.display = 'none';
                 renderSchedule(currentDay);
             }
         }
         
-        // Функція для збереження змін
+        // ФУНКЦІЯ ДОДАВАННЯ УРОКУ
+        function addLesson() {
+            createEditableLessonRow("", "");
+        }
+        
+        // Функція для збереження змін (ЛОГІКА LOCALSTORAGE ВИДАЛЕНА)
         function saveChanges() {
             const newSchedule = [];
             const listItems = modalList.querySelectorAll('li');
@@ -406,26 +432,22 @@
                 const nameInput = li.querySelector('.name-input');
                 
                 if (timeInput && nameInput) {
-                    newSchedule.push({
-                        time: timeInput.value.trim(),
-                        lesson: nameInput.value.trim()
-                    });
+                    const time = timeInput.value.trim();
+                    const lesson = nameInput.value.trim();
+                    
+                    if (time || lesson) {
+                         newSchedule.push({ time, lesson });
+                    }
                 }
             });
 
+            // Зберігаємо в тимчасову пам'ять JS
             scheduleData[currentDay] = newSchedule;
             
-            // ЗБЕРІГАННЯ В LOCALSTORAGE
-            try {
-                localStorage.setItem('class6Schedule', JSON.stringify(scheduleData));
-            } catch (e) {
-                console.error("Помилка при збереженні в localStorage:", e);
-                alert("Не вдалося зберегти зміни у пам'яті браузера.");
-                return;
-            }
+            // !!! БЕЗ ЗБЕРЕЖЕННЯ В LOCALSTORAGE !!!
 
             toggleEditMode();
-            alert(`Расписание на ${currentDay} сохранено и будет доступно после перезагрузки страницы!`);
+            alert(`Розклад на ${currentDay} оновлено. Зверніть увагу, зміни будуть втрачені після перезавантаження сторінки.`);
         }
 
         // Функція для відкриття модального вікна
@@ -435,6 +457,7 @@
             modalTitle.textContent = `Розклад на ${day}`;
             editBtn.style.display = 'inline-block';
             saveBtn.style.display = 'none';
+            addLessonBtn.style.display = 'none';
 
             renderSchedule(day);
             modal.classList.add('open');
@@ -457,6 +480,7 @@
         closeBtn.addEventListener('click', closeModal);
         editBtn.addEventListener('click', toggleEditMode);
         saveBtn.addEventListener('click', saveChanges);
+        addLessonBtn.addEventListener('click', addLesson);
 
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
