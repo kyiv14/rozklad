@@ -28,6 +28,10 @@
             color: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            /* Стилі для центрування тепер не потрібні, але Flexbox не завадить */
+            display: flex; 
+            align-items: center;
+            justify-content: center;
         }
 
         .header h1 {
@@ -35,6 +39,8 @@
             font-size: 1.8em;
             letter-spacing: 1.5px;
         }
+        
+        /* Видалено стилі для .header .icon */
 
         .schedule-container {
             width: 100%;
@@ -96,9 +102,8 @@
 
         .modal-content {
             background-color: #fefefe;
-            /* Відступи для мобільних забезпечують, що контент не прилипає до країв */
             margin: 5% 15px; 
-            padding: 20px; /* Трохи зменшимо внутрішній відступ */
+            padding: 20px;
             border-radius: 12px;
             border: 1px solid #888;
             width: auto;
@@ -119,19 +124,19 @@
             margin-top: 0;
         }
 
-        /* --- СТИЛІ ТАБЛИЦІ (КОРЕКЦІЯ ШИРИНИ) --- */
+        /* --- СТИЛІ ТАБЛИЦІ --- */
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1em;
-            table-layout: fixed; /* Допомагає контролювати ширину колонок */
+            table-layout: fixed;
         }
         
         .schedule-table th, .schedule-table td {
-            padding: 5px 3px; /* Зменшимо внутрішні відступи */
+            padding: 5px 3px;
             text-align: left;
             border-bottom: 1px dashed #ccc;
-            word-wrap: break-word; /* Дозволяє довгим словам переноситися */
+            word-wrap: break-word;
         }
 
         .schedule-table th {
@@ -139,25 +144,25 @@
             font-weight: bold;
             color: #555;
             text-transform: uppercase;
-            font-size: 0.75em; /* Зменшимо розмір шрифту заголовків */
+            font-size: 0.75em;
         }
         
-        .schedule-table col:nth-child(1) { width: 15%; } /* Час */
-        .schedule-table col:nth-child(2) { width: 50%; } /* Предмет */
-        .schedule-table col:nth-child(3) { width: 35%; } /* Вчитель (максимально вузько) */
+        .schedule-table col:nth-child(1) { width: 15%; }
+        .schedule-table col:nth-child(2) { width: 50%; }
+        .schedule-table col:nth-child(3) { width: 35%; }
 
         .schedule-table td:first-child { 
             font-weight: bold;
             color: #007bff;
             font-size: 0.9em;
-            white-space: nowrap; /* Час не переноситься */
+            white-space: nowrap;
         }
         
         .schedule-table td:last-child { 
-            font-size: 0.8em; /* Зменшимо шрифт імені вчителя */
+            font-size: 0.8em;
             color: #666;
             text-align: right;
-            line-height: 1.1; /* Зменшимо міжрядковий інтервал для імені */
+            line-height: 1.1;
         }
         
         /* Кнопка закриття */
@@ -227,8 +232,7 @@
     </div>
 
     <script>
-        // --- ДАНІ РОЗКЛАДУ З ВАШОГО ЗОБРАЖЕННЯ (ФАМІЛІЯ + <br> + ІМ'Я) ---
-        // Використовуємо <br> для переносу рядка
+        // --- ДАНІ РОЗКЛАДУ ---
         const scheduleData = {
             "Понеділок": [
                 { time: "09:00", lesson: "" },
@@ -293,13 +297,11 @@
             if (schedule && schedule.length > 0) {
                 schedule.forEach((item) => {
                     const hasContent = item.lesson || item.teacher;
-                    // Пропускаємо порожні рядки часу, якщо вони не є початком блоку (09:00, 10:00)
                     if (!hasContent && item.time !== "09:00" && item.time !== "10:00" && item.time !== "15:00" && item.time !== "16:00" && item.time !== "17:00") {
                         return; 
                     }
                     
                     const row = document.createElement('tr');
-                    // Використовуємо innerHTML, оскільки поле teacher містить тег <br>
                     row.innerHTML = `
                         <td>${item.time}</td> 
                         <td>${item.lesson || ''}</td>
