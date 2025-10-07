@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>РОЗКЛАД 6 КЛАС</title>
+    <title>РОЗКЛАД 6 КЛАС (Оновлений)</title>
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -40,7 +40,7 @@
             width: 100%;
             max-width: 600px;
             display: grid;
-            grid-template-columns: 1fr; /* 1 колонка для мобільних */
+            grid-template-columns: 1fr;
             gap: 15px;
         }
 
@@ -75,15 +75,15 @@
 
         /* --- 4. СТИЛІ МОДАЛЬНОГО ВІКНА --- */
         .modal {
-            display: none; /* Сховано за замовчуванням */
+            display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7); /* Напівпрозорий чорний фон */
+            background-color: rgba(0, 0, 0, 0.7);
             padding-top: 60px;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
@@ -96,13 +96,13 @@
 
         .modal-content {
             background-color: #fefefe;
-            /* !!! ОНОВЛЕНІ СТИЛІ ДЛЯ МОБІЛЬНОЇ ВЕРСІЇ !!! */
-            margin: 5% 15px; /* 5% зверху/знизу та 15px зліва/справа */
+            /* Відступи для мобільних */
+            margin: 5% 15px; 
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #888;
-            width: auto; /* Автоматична ширина з урахуванням margin */
-            max-width: 400px; /* Максимальна ширина */
+            width: auto;
+            max-width: 400px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             transform: translateY(-50px);
             transition: transform 0.3s ease-in-out;
@@ -130,15 +130,85 @@
             display: flex;
             justify-content: space-between;
             font-size: 1.1em;
+            cursor: pointer;
         }
         
         .schedule-list li:last-child {
             border-bottom: none;
         }
 
+        .lesson-time, .lesson-name {
+            display: block;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
         .lesson-time {
             font-weight: bold;
             color: #555;
+            width: 60px;
+        }
+        
+        .lesson-name {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        /* Стилі для полів введення в режимі редагування */
+        .schedule-list input[type="text"] {
+            font-size: 1em;
+            padding: 2px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-list .time-input {
+            width: 55px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .schedule-list .name-input {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        /* Кнопки управління */
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.2s;
+        }
+
+        #editBtn {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        #editBtn:hover {
+            background-color: #e0a800;
+        }
+
+        #saveBtn {
+            background-color: #28a745;
+            color: white;
+            display: none;
+        }
+
+        #saveBtn:hover {
+            background-color: #1e7e34;
         }
 
         /* Кнопка закриття */
@@ -157,7 +227,7 @@
             cursor: pointer;
         }
 
-        /* --- 5. АДАПТАЦІЯ ДЛЯ ДЕСКТОПІВ (ПОВЕРТАЄМО ЦЕНТРУВАННЯ) --- */
+        /* --- 5. АДАПТАЦІЯ ДЛЯ ДЕСКТОПІВ --- */
         @media (min-width: 480px) {
             .schedule-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -165,7 +235,6 @@
             .header h1 {
                 font-size: 2.2em;
             }
-            /* На екранах > 480px повертаємо авто-центрування модального вікна */
             .modal-content {
                 margin: 5% auto; 
                 width: 90%; 
@@ -185,88 +254,89 @@
     </div>
 
     <div class="schedule-container">
-        <div class="day-plank" data-day="Понеділок">
-            <h2>Понеділок</h2>
-        </div>
-        <div class="day-plank" data-day="Вівторок">
-            <h2>Вівторок</h2>
-        </div>
-        <div class="day-plank" data-day="Середа">
-            <h2>Середа</h2>
-        </div>
-        <div class="day-plank" data-day="Четвер">
-            <h2>Четвер</h2>
-        </div>
-        <div class="day-plank" data-day="П'ятниця">
-            <h2>П'ятниця</h2>
-        </div>
+        <div class="day-plank" data-day="Понеділок"><h2>Понеділок</h2></div>
+        <div class="day-plank" data-day="Вівторок"><h2>Вівторок</h2></div>
+        <div class="day-plank" data-day="Середа"><h2>Середа</h2></div>
+        <div class="day-plank" data-day="Четвер"><h2>Четвер</h2></div>
+        <div class="day-plank" data-day="П'ятниця"><h2>П'ятниця</h2></div>
     </div>
 
     <div id="scheduleModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h3 id="modalDayTitle">Розклад на День</h3>
+            
             <ul id="modalScheduleList" class="schedule-list">
                 </ul>
+
+            <div class="modal-footer">
+                <button id="editBtn" class="modal-btn">Редагувати ✏️</button>
+                <button id="saveBtn" class="modal-btn">Зберегти ✔️</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- ДАНІ РОЗКЛАДУ ---
-        const scheduleData = {
+        // --- ДАНІ РОЗКЛАДУ (ОНОВЛЕНО) ---
+        let scheduleData = { 
             "Понеділок": [
-                { time: "8:30", lesson: "Математика" },
-                { time: "9:25", lesson: "Українська мова" },
-                { time: "10:20", lesson: "Історія" },
-                { time: "11:15", lesson: "Фізкультура" },
-                { time: "12:10", lesson: "Англійська мова" }
+                { time: "10:00", lesson: "Українська мова" },
+                { time: "11:00", lesson: "Математика" },
+                { time: "12:00", lesson: "Історія" },
+                { time: "13:00", lesson: "Фізкультура" },
+                { time: "14:00", lesson: "Англійська мова" } // Закінчується о 15:00
             ],
             "Вівторок": [
-                { time: "8:30", lesson: "Географія" },
-                { time: "9:25", lesson: "Біологія" },
-                { time: "10:20", lesson: "Інформатика" },
-                { time: "11:15", lesson: "Образотворче мистецтво" }
+                { time: "10:00", lesson: "Географія" },
+                { time: "11:00", lesson: "Біологія" },
+                { time: "12:00", lesson: "Інформатика" },
+                { time: "13:00", lesson: "Образотворче мистецтво" } // Закінчується о 14:00
             ],
             "Середа": [
-                { time: "8:30", lesson: "Фізика" },
-                { time: "9:25", lesson: "Математика" },
-                { time: "10:20", lesson: "Українська література" },
-                { time: "11:15", lesson: "Трудове навчання" }
+                { time: "10:00", lesson: "Фізика" },
+                { time: "11:00", lesson: "Математика" },
+                { time: "12:00", lesson: "Українська література" },
+                { time: "13:00", lesson: "Трудове навчання" },
+                { time: "14:00", lesson: "Основи здоров'я" } // Закінчується о 15:00
             ],
             "Четвер": [
-                { time: "8:30", lesson: "Англійська мова" },
-                { time: "9:25", lesson: "Хімія" },
-                { time: "10:20", lesson: "Математика" },
-                { time: "11:15", lesson: "Основи здоров'я" },
-                { time: "12:10", lesson: "Музичне мистецтво" }
+                { time: "10:00", lesson: "Англійська мова" },
+                { time: "11:00", lesson: "Хімія" },
+                { time: "12:00", lesson: "Математика" },
+                { time: "13:00", lesson: "Музичне мистецтво" } // Закінчується о 14:00
             ],
             "П'ятниця": [
-                { time: "8:30", lesson: "Математика" },
-                { time: "9:25", lesson: "Українська мова" },
-                { time: "10:20", lesson: "Зарубіжна література" },
-                { time: "11:15", lesson: "Фізкультура" }
+                { time: "11:00", lesson: "Математика" }, // Починається з 11:00
+                { time: "12:00", lesson: "Українська мова" },
+                { time: "13:00", lesson: "Зарубіжна література" } // Закінчується о 14:00
             ]
         };
 
-        // --- ЛОГІКА МОДАЛЬНОГО ВІКНА ---
+        // --- ЛОГІКА МОДАЛЬНОГО ВІКНА ТА РЕДАГУВАННЯ (БЕЗ ЗМІН) ---
         const modal = document.getElementById('scheduleModal');
         const modalTitle = document.getElementById('modalDayTitle');
         const modalList = document.getElementById('modalScheduleList');
         const closeBtn = document.querySelector('.close');
         const dayPlanks = document.querySelectorAll('.day-plank');
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
 
-        // Функція для відкриття модального вікна
-        function openModal(day) {
+        let currentDay = '';
+        let isEditing = false;
+
+        // Рендеринг розкладу у модальному вікні
+        function renderSchedule(day) {
             const schedule = scheduleData[day];
-            
-            modalTitle.textContent = `Розклад на ${day}`;
-            modalList.innerHTML = ''; // Очищаємо список перед заповненням
+            modalList.innerHTML = ''; 
 
-            // Заповнюємо список уроками
-            if (schedule) {
-                schedule.forEach(item => {
+            if (schedule && schedule.length > 0) {
+                schedule.forEach((item, index) => {
                     const listItem = document.createElement('li');
-                    listItem.innerHTML = `<span class="lesson-time">${item.time}</span> <span>${item.lesson}</span>`;
+                    listItem.dataset.index = index;
+                    listItem.innerHTML = `
+                        <span class="lesson-time">${item.time}</span> 
+                        <span class="lesson-name">${item.lesson}</span>
+                    `;
                     modalList.appendChild(listItem);
                 });
             } else {
@@ -274,16 +344,74 @@
                  listItem.textContent = "На цей день розклад відсутній.";
                  modalList.appendChild(listItem);
             }
+        }
+
+        // Функція для перемикання режиму редагування
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const listItems = modalList.querySelectorAll('li');
+
+            if (isEditing) {
+                editBtn.style.display = 'none';
+                saveBtn.style.display = 'inline-block';
+                listItems.forEach(li => {
+                    const timeSpan = li.querySelector('.lesson-time');
+                    const nameSpan = li.querySelector('.lesson-name');
+
+                    if (timeSpan && nameSpan) {
+                        timeSpan.outerHTML = `<input type="text" class="time-input" value="${timeSpan.textContent}" data-field="time">`;
+                        nameSpan.outerHTML = `<input type="text" class="name-input" value="${nameSpan.textContent}" data-field="lesson">`;
+                        li.style.cursor = 'default'; 
+                    }
+                });
+            } else {
+                editBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+                renderSchedule(currentDay);
+            }
+        }
+        
+        // Функція для збереження змін
+        function saveChanges() {
+            const newSchedule = [];
+            const listItems = modalList.querySelectorAll('li');
             
-            modal.classList.add('open'); // Додаємо клас для анімації
+            listItems.forEach(li => {
+                const timeInput = li.querySelector('.time-input');
+                const nameInput = li.querySelector('.name-input');
+                
+                if (timeInput && nameInput) {
+                    newSchedule.push({
+                        time: timeInput.value.trim(),
+                        lesson: nameInput.value.trim()
+                    });
+                }
+            });
+
+            scheduleData[currentDay] = newSchedule;
+            toggleEditMode();
+            alert(`Розклад на ${currentDay} збережено!`);
+        }
+
+        // Функція для відкриття модального вікна
+        function openModal(day) {
+            currentDay = day;
+            isEditing = false;
+            modalTitle.textContent = `Розклад на ${day}`;
+            editBtn.style.display = 'inline-block';
+            saveBtn.style.display = 'none';
+
+            renderSchedule(day);
+            modal.classList.add('open');
         }
 
         // Функція для закриття модального вікна
         function closeModal() {
+            isEditing = false;
             modal.classList.remove('open');
         }
 
-        // Обробник кліків на плашки
+        // --- ОБРОБНИКИ ПОДІЙ ---
         dayPlanks.forEach(plank => {
             plank.addEventListener('click', function() {
                 const day = this.getAttribute('data-day');
@@ -291,10 +419,10 @@
             });
         });
 
-        // Обробники закриття
         closeBtn.addEventListener('click', closeModal);
+        editBtn.addEventListener('click', toggleEditMode);
+        saveBtn.addEventListener('click', saveChanges);
 
-        // Закриття при кліку поза межами модального вікна
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
                 closeModal();
