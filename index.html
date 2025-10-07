@@ -10,18 +10,16 @@
     <link rel="apple-touch-icon" href="https://rozklad6.netlify.app/icon.ico">
     
     <style>
-        /* --- 1. ОСНОВНІ СТИЛІ --- */
+        /* --- 1. ОСНОВНІ СТИЛІ (Mobile First) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            /* Стилі для фонового зображення */
-            background-image: url('https://rozklad6.netlify.app/fon.jpg');
-            background-size: cover; /* Покриває всю область */
-            background-repeat: no-repeat; /* Заборона повторення */
-            background-attachment: fixed; /* Фіксоване положення при прокручуванні */
-            background-color: #f4f7f6; /* Запасний колір, якщо зображення не завантажиться */
-            /* Кінець стилів фонового зображення */
+            
+            /* Стилі для мобільної версії: БІЛИЙ ФОН */
+            background-color: white; /* Білий фон */
+            background-image: none; /* Вимикаємо зображення на мобільному */
+            
             color: #333;
             display: flex;
             flex-direction: column;
@@ -230,6 +228,12 @@
         @media (min-width: 480px) {
             body {
                 padding-top: 200px; /* Сдвиг всего контента на 200px вниз */
+                /* Стилі для фонового зображення на ПК */
+                background-image: url('https://rozklad6.netlify.app/fon.jpg');
+                background-size: cover; /* Покриває всю область */
+                background-repeat: no-repeat; /* Заборона повторення */
+                background-attachment: fixed; /* Фіксоване положення при прокручуванні */
+                background-color: #f4f7f6; /* Запасний колір */
             }
             .schedule-container {
                 grid-template-columns: repeat(2, 1fr);
