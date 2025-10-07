@@ -22,11 +22,23 @@
             align-items: center;
         }
 
+        /* АНІМАЦІЯ ПОЯВИ ПЛАШОК */
+        @keyframes fadeInRise {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         /* --- 2. СТИЛІ ЗАГОЛОВКА ТА КОНТЕЙНЕРА --- */
         .header {
             width: 100%;
             max-width: 600px;
-            text-align: center; /* Центрує текст всередині заголовка */
+            text-align: center;
             margin-bottom: 30px;
             padding: 15px;
             background-color: #007bff;
@@ -58,14 +70,27 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            text-align: center; /* Центрує напис дня тижня */
-            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+            /* Плавний перехід для Hover ефектів */
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s; 
             cursor: pointer;
+            
+            /* Застосування анімації появи */
+            opacity: 0; /* Ховаємо спочатку */
+            animation: fadeInRise 0.5s ease-out forwards;
         }
+        
+        /* Затримка анімації для послідовного появи плашок */
+        .day-plank:nth-child(1) { animation-delay: 0.1s; }
+        .day-plank:nth-child(2) { animation-delay: 0.2s; }
+        .day-plank:nth-child(3) { animation-delay: 0.3s; }
+        .day-plank:nth-child(4) { animation-delay: 0.4s; }
+        .day-plank:nth-child(5) { animation-delay: 0.5s; }
 
         .day-plank:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background-color: #e9ecef; /* Світло-сірий фон при наведенні */
         }
 
         .day-plank h2 {
@@ -113,7 +138,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             transform: translateY(-50px);
             transition: transform 0.3s ease-in-out;
-            text-align: center; /* Центрує заголовок модалки */
+            text-align: center;
         }
         
         .modal.open .modal-content {
@@ -127,13 +152,13 @@
             margin-top: 0;
         }
 
-        /* --- СТИЛІ ТАБЛИЦІ (КОРЕКЦІЯ ШИРИНИ ТА ЦЕНТРУВАННЯ) --- */
+        /* --- СТИЛІ ТАБЛИЦІ (ЦЕНТРУВАННЯ) --- */
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1em;
             table-layout: fixed;
-            text-align: center; /* Центруємо текст у всій таблиці */
+            text-align: center;
         }
         
         .schedule-table th, .schedule-table td {
@@ -150,11 +175,10 @@
             font-size: 0.75em;
         }
         
-        /* Вирівнювання полів у таблиці */
-        .schedule-table col:nth-child(1) { width: 15%; } /* Час */
-        .schedule-table col:nth-child(2) { width: 50%; } /* Предмет */
-        .schedule-table col:nth-child(3) { width: 35%; } /* Вчитель */
-        
+        .schedule-table col:nth-child(1) { width: 15%; }
+        .schedule-table col:nth-child(2) { width: 50%; }
+        .schedule-table col:nth-child(3) { width: 35%; }
+
         .schedule-table td:first-child { 
             font-weight: bold;
             color: #007bff;
@@ -168,12 +192,8 @@
             line-height: 1.1;
         }
         
-        /* Вирівнювання тексту в клітинках - за замовчуванням вже center */
-        .schedule-table th {
-            text-align: center; /* Заголовки таблиці по центру */
-        }
-        .schedule-table td {
-            text-align: center; /* Всі дані таблиці по центру */
+        .schedule-table th, .schedule-table td {
+            text-align: center; 
         }
 
         /* Кнопка закриття */
