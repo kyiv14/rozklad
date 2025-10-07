@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>РОЗКЛАД 6 КЛАС (Зберігання)</title>
+    <title>РОЗКЛАД 6 КЛАС (Оновлене)</title>
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -96,7 +96,8 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 5% 15px; /* Отступы для мобильных */
+            /* Отступы для мобильных */
+            margin: 5% 15px; 
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #888;
@@ -276,39 +277,44 @@
     </div>
 
     <script>
-        // --- ДАНІ РОЗКЛАДУ (УМОВНІ ЗНАЧЕННЯ ЗА ЗАМОВЧУВАННЯМ) ---
+        // --- ДАНІ РОЗКЛАДУ (ОНОВЛЕНО) ---
         function getDefaultSchedule() {
             return {
-                "Понеділок": [
+                "Понеділок": [ // З 10:00 до 16:00
                     { time: "10:00", lesson: "Українська мова" },
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Історія" },
                     { time: "13:00", lesson: "Фізкультура" },
-                    { time: "14:00", lesson: "Англійська мова" }
+                    { time: "14:00", lesson: "Англійська мова" },
+                    { time: "15:00", lesson: "Новий предмет 1" } // +1 час
                 ],
-                "Вівторок": [
+                "Вівторок": [ // З 10:00 до 15:00
                     { time: "10:00", lesson: "Географія" },
                     { time: "11:00", lesson: "Біологія" },
                     { time: "12:00", lesson: "Інформатика" },
-                    { time: "13:00", lesson: "Образотворче мистецтво" }
+                    { time: "13:00", lesson: "Образотворче мистецтво" },
+                    { time: "14:00", lesson: "Новий предмет 2" } // +1 час
                 ],
-                "Середа": [
+                "Середа": [ // З 10:00 до 16:00
                     { time: "10:00", lesson: "Фізика" },
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Українська література" },
                     { time: "13:00", lesson: "Трудове навчання" },
-                    { time: "14:00", lesson: "Основи здоров'я" }
+                    { time: "14:00", lesson: "Основи здоров'я" },
+                    { time: "15:00", lesson: "Новий предмет 3" } // +1 час
                 ],
-                "Четвер": [
+                "Четвер": [ // З 10:00 до 15:00
                     { time: "10:00", lesson: "Англійська мова" },
                     { time: "11:00", lesson: "Хімія" },
                     { time: "12:00", lesson: "Математика" },
-                    { time: "13:00", lesson: "Музичне мистецтво" }
+                    { time: "13:00", lesson: "Музичне мистецтво" },
+                    { time: "14:00", lesson: "Новий предмет 4" } // +1 час
                 ],
-                "П'ятниця": [
+                "П'ятниця": [ // З 11:00 до 15:00
                     { time: "11:00", lesson: "Математика" },
                     { time: "12:00", lesson: "Українська мова" },
-                    { time: "13:00", lesson: "Зарубіжна література" }
+                    { time: "13:00", lesson: "Зарубіжна література" },
+                    { time: "14:00", lesson: "Новий предмет 5" } // +1 час
                 ]
             };
         }
@@ -320,14 +326,17 @@
             const savedData = localStorage.getItem('class6Schedule');
             if (savedData) {
                 try {
+                    // !!! ПРИМІТКА !!!
+                    // Якщо в localStorage зберігаються старі дані, 
+                    // вони будуть завантажені замість оновленого розкладу.
+                    // Щоб побачити новий розклад за замовчуванням, 
+                    // потрібно очистити localStorage або внести зміни через інтерфейс.
                     return JSON.parse(savedData);
                 } catch (e) {
                     console.error("Помилка при завантаженні розкладу з localStorage:", e);
-                    // Повернення до даних за замовчуванням у разі помилки
                     return getDefaultSchedule();
                 }
             }
-            // Повернення даних за замовчуванням, якщо нічого не збережено
             return getDefaultSchedule();
         }
 
@@ -380,21 +389,19 @@
                     const nameSpan = li.querySelector('.lesson-name');
 
                     if (timeSpan && nameSpan) {
-                        // Перетворюємо спани на поля введення
                         timeSpan.outerHTML = `<input type="text" class="time-input" value="${timeSpan.textContent}" data-field="time">`;
                         nameSpan.outerHTML = `<input type="text" class="name-input" value="${nameSpan.textContent}" data-field="lesson">`;
                         li.style.cursor = 'default'; 
                     }
                 });
             } else {
-                // Повертаємося до режиму перегляду
                 editBtn.style.display = 'inline-block';
                 saveBtn.style.display = 'none';
                 renderSchedule(currentDay);
             }
         }
         
-        // Функція для збереження змін (ОНОВЛЕНО)
+        // Функція для збереження змін
         function saveChanges() {
             const newSchedule = [];
             const listItems = modalList.querySelectorAll('li');
@@ -413,7 +420,7 @@
 
             scheduleData[currentDay] = newSchedule;
             
-            // !!! ЗБЕРІГАННЯ В LOCALSTORAGE !!!
+            // ЗБЕРІГАННЯ В LOCALSTORAGE
             try {
                 localStorage.setItem('class6Schedule', JSON.stringify(scheduleData));
             } catch (e) {
@@ -461,6 +468,12 @@
                 closeModal();
             }
         });
+        
+        // --- ЗАМІТКА ПРО LOCALSTORAGE ---
+        // Якщо ви вже редагували розклад раніше, 
+        // браузер міг зберегти старі дані. Щоб побачити нове розширене розклад, 
+        // вам може знадобитися вручну очистити LocalStorage 
+        // (Інструменти розробника -> Application -> Local Storage).
     </script>
 
 </body>
