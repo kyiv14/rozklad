@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>РОЗКЛАД 6 КЛАС (Оновлений)</title>
+    <title>РОЗКЛАД 6 КЛАС (Зберігання)</title>
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -96,8 +96,7 @@
 
         .modal-content {
             background-color: #fefefe;
-            /* Відступи для мобільних */
-            margin: 5% 15px; 
+            margin: 5% 15px; /* Отступы для мобильных */
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #888;
@@ -174,7 +173,7 @@
             text-align: left;
         }
 
-        /* Кнопки управління */
+        /* Кнопки управления */
         .modal-footer {
             margin-top: 20px;
             text-align: right;
@@ -277,42 +276,64 @@
     </div>
 
     <script>
-        // --- ДАНІ РОЗКЛАДУ (ОНОВЛЕНО) ---
-        let scheduleData = { 
-            "Понеділок": [
-                { time: "10:00", lesson: "Українська мова" },
-                { time: "11:00", lesson: "Математика" },
-                { time: "12:00", lesson: "Історія" },
-                { time: "13:00", lesson: "Фізкультура" },
-                { time: "14:00", lesson: "Англійська мова" } // Закінчується о 15:00
-            ],
-            "Вівторок": [
-                { time: "10:00", lesson: "Географія" },
-                { time: "11:00", lesson: "Біологія" },
-                { time: "12:00", lesson: "Інформатика" },
-                { time: "13:00", lesson: "Образотворче мистецтво" } // Закінчується о 14:00
-            ],
-            "Середа": [
-                { time: "10:00", lesson: "Фізика" },
-                { time: "11:00", lesson: "Математика" },
-                { time: "12:00", lesson: "Українська література" },
-                { time: "13:00", lesson: "Трудове навчання" },
-                { time: "14:00", lesson: "Основи здоров'я" } // Закінчується о 15:00
-            ],
-            "Четвер": [
-                { time: "10:00", lesson: "Англійська мова" },
-                { time: "11:00", lesson: "Хімія" },
-                { time: "12:00", lesson: "Математика" },
-                { time: "13:00", lesson: "Музичне мистецтво" } // Закінчується о 14:00
-            ],
-            "П'ятниця": [
-                { time: "11:00", lesson: "Математика" }, // Починається з 11:00
-                { time: "12:00", lesson: "Українська мова" },
-                { time: "13:00", lesson: "Зарубіжна література" } // Закінчується о 14:00
-            ]
-        };
+        // --- ДАНІ РОЗКЛАДУ (УМОВНІ ЗНАЧЕННЯ ЗА ЗАМОВЧУВАННЯМ) ---
+        function getDefaultSchedule() {
+            return {
+                "Понеділок": [
+                    { time: "10:00", lesson: "Українська мова" },
+                    { time: "11:00", lesson: "Математика" },
+                    { time: "12:00", lesson: "Історія" },
+                    { time: "13:00", lesson: "Фізкультура" },
+                    { time: "14:00", lesson: "Англійська мова" }
+                ],
+                "Вівторок": [
+                    { time: "10:00", lesson: "Географія" },
+                    { time: "11:00", lesson: "Біологія" },
+                    { time: "12:00", lesson: "Інформатика" },
+                    { time: "13:00", lesson: "Образотворче мистецтво" }
+                ],
+                "Середа": [
+                    { time: "10:00", lesson: "Фізика" },
+                    { time: "11:00", lesson: "Математика" },
+                    { time: "12:00", lesson: "Українська література" },
+                    { time: "13:00", lesson: "Трудове навчання" },
+                    { time: "14:00", lesson: "Основи здоров'я" }
+                ],
+                "Четвер": [
+                    { time: "10:00", lesson: "Англійська мова" },
+                    { time: "11:00", lesson: "Хімія" },
+                    { time: "12:00", lesson: "Математика" },
+                    { time: "13:00", lesson: "Музичне мистецтво" }
+                ],
+                "П'ятниця": [
+                    { time: "11:00", lesson: "Математика" },
+                    { time: "12:00", lesson: "Українська мова" },
+                    { time: "13:00", lesson: "Зарубіжна література" }
+                ]
+            };
+        }
 
-        // --- ЛОГІКА МОДАЛЬНОГО ВІКНА ТА РЕДАГУВАННЯ (БЕЗ ЗМІН) ---
+        // --- ЛОГІКА ЗБЕРЕЖЕННЯ (localStorage) ---
+
+        // Завантажуємо розклад, пріоритет - збережені дані
+        function loadSchedule() {
+            const savedData = localStorage.getItem('class6Schedule');
+            if (savedData) {
+                try {
+                    return JSON.parse(savedData);
+                } catch (e) {
+                    console.error("Помилка при завантаженні розкладу з localStorage:", e);
+                    // Повернення до даних за замовчуванням у разі помилки
+                    return getDefaultSchedule();
+                }
+            }
+            // Повернення даних за замовчуванням, якщо нічого не збережено
+            return getDefaultSchedule();
+        }
+
+        let scheduleData = loadSchedule();
+
+        // --- ЛОГІКА МОДАЛЬНОГО ВІКНА ТА РЕДАГУВАННЯ ---
         const modal = document.getElementById('scheduleModal');
         const modalTitle = document.getElementById('modalDayTitle');
         const modalList = document.getElementById('modalScheduleList');
@@ -359,19 +380,21 @@
                     const nameSpan = li.querySelector('.lesson-name');
 
                     if (timeSpan && nameSpan) {
+                        // Перетворюємо спани на поля введення
                         timeSpan.outerHTML = `<input type="text" class="time-input" value="${timeSpan.textContent}" data-field="time">`;
                         nameSpan.outerHTML = `<input type="text" class="name-input" value="${nameSpan.textContent}" data-field="lesson">`;
                         li.style.cursor = 'default'; 
                     }
                 });
             } else {
+                // Повертаємося до режиму перегляду
                 editBtn.style.display = 'inline-block';
                 saveBtn.style.display = 'none';
                 renderSchedule(currentDay);
             }
         }
         
-        // Функція для збереження змін
+        // Функція для збереження змін (ОНОВЛЕНО)
         function saveChanges() {
             const newSchedule = [];
             const listItems = modalList.querySelectorAll('li');
@@ -389,8 +412,18 @@
             });
 
             scheduleData[currentDay] = newSchedule;
+            
+            // !!! ЗБЕРІГАННЯ В LOCALSTORAGE !!!
+            try {
+                localStorage.setItem('class6Schedule', JSON.stringify(scheduleData));
+            } catch (e) {
+                console.error("Помилка при збереженні в localStorage:", e);
+                alert("Не вдалося зберегти зміни у пам'яті браузера.");
+                return;
+            }
+
             toggleEditMode();
-            alert(`Розклад на ${currentDay} збережено!`);
+            alert(`Расписание на ${currentDay} сохранено и будет доступно после перезагрузки страницы!`);
         }
 
         // Функція для відкриття модального вікна
