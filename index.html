@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>РОЗКЛАД 6 КЛАС</title>
+    
     <link rel="icon" type="image/x-icon" href="https://rozklad6.netlify.app/icon.ico">
+    
+    <link rel="apple-touch-icon" href="https://rozklad6.netlify.app/icon.ico">
+    
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -22,7 +26,7 @@
         .header {
             width: 100%;
             max-width: 600px;
-            text-align: center;
+            text-align: center; /* Центрує текст всередині заголовка */
             margin-bottom: 30px;
             padding: 15px;
             background-color: #007bff;
@@ -54,7 +58,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            text-align: center;
+            text-align: center; /* Центрує напис дня тижня */
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
         }
@@ -109,6 +113,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             transform: translateY(-50px);
             transition: transform 0.3s ease-in-out;
+            text-align: center; /* Центрує заголовок модалки */
         }
         
         .modal.open .modal-content {
@@ -122,17 +127,17 @@
             margin-top: 0;
         }
 
-        /* --- СТИЛІ ТАБЛИЦІ (КОРЕКЦІЯ ШИРИНИ) --- */
+        /* --- СТИЛІ ТАБЛИЦІ (КОРЕКЦІЯ ШИРИНИ ТА ЦЕНТРУВАННЯ) --- */
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1em;
             table-layout: fixed;
+            text-align: center; /* Центруємо текст у всій таблиці */
         }
         
         .schedule-table th, .schedule-table td {
             padding: 5px 3px;
-            text-align: left;
             border-bottom: 1px dashed #ccc;
             word-wrap: break-word;
         }
@@ -145,10 +150,11 @@
             font-size: 0.75em;
         }
         
-        .schedule-table col:nth-child(1) { width: 15%; }
-        .schedule-table col:nth-child(2) { width: 50%; }
-        .schedule-table col:nth-child(3) { width: 35%; }
-
+        /* Вирівнювання полів у таблиці */
+        .schedule-table col:nth-child(1) { width: 15%; } /* Час */
+        .schedule-table col:nth-child(2) { width: 50%; } /* Предмет */
+        .schedule-table col:nth-child(3) { width: 35%; } /* Вчитель */
+        
         .schedule-table td:first-child { 
             font-weight: bold;
             color: #007bff;
@@ -159,10 +165,17 @@
         .schedule-table td:last-child { 
             font-size: 0.8em;
             color: #666;
-            text-align: right;
             line-height: 1.1;
         }
         
+        /* Вирівнювання тексту в клітинках - за замовчуванням вже center */
+        .schedule-table th {
+            text-align: center; /* Заголовки таблиці по центру */
+        }
+        .schedule-table td {
+            text-align: center; /* Всі дані таблиці по центру */
+        }
+
         /* Кнопка закриття */
         .close {
             color: #aaa;
