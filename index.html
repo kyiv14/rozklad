@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>РОЗКЛАД 6 КЛАС</title>
+    <link rel="icon" type="image/x-icon" href="https://rozklad6.netlify.app/icon.ico">
     <style>
         /* --- 1. ОСНОВНІ СТИЛІ --- */
         body {
@@ -28,7 +29,6 @@
             color: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            /* Стилі для центрування тепер не потрібні, але Flexbox не завадить */
             display: flex; 
             align-items: center;
             justify-content: center;
@@ -40,8 +40,6 @@
             letter-spacing: 1.5px;
         }
         
-        /* Видалено стилі для .header .icon */
-
         .schedule-container {
             width: 100%;
             max-width: 600px;
@@ -124,7 +122,7 @@
             margin-top: 0;
         }
 
-        /* --- СТИЛІ ТАБЛИЦІ --- */
+        /* --- СТИЛІ ТАБЛИЦІ (КОРЕКЦІЯ ШИРИНИ) --- */
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
@@ -289,7 +287,7 @@
         const closeBtn = document.querySelector('.close');
         const dayPlanks = document.querySelectorAll('.day-plank');
         
-        // Рендеринг розкладу у модальному вікні у форматі таблиці
+        // Рендеринг расписания в модальном окне в формате таблицы
         function renderSchedule(day) {
             const schedule = scheduleData[day];
             modalBody.innerHTML = ''; 
@@ -316,19 +314,19 @@
             }
         }
 
-        // Функція для відкриття модального вікна
+        // Функция для открытия модального окна
         function openModal(day) {
             modalTitle.textContent = `Розклад на ${day}`;
             renderSchedule(day);
             modal.classList.add('open');
         }
 
-        // Функція для закриття модального вікна
+        // Функция для закрытия модального окна
         function closeModal() {
             modal.classList.remove('open');
         }
 
-        // --- ОБРОБНИКИ ПОДІЙ ---
+        // --- ОБРАБОТЧИКИ СОБЫТИЙ ---
         dayPlanks.forEach(plank => {
             plank.addEventListener('click', function() {
                 const day = this.getAttribute('data-day');
